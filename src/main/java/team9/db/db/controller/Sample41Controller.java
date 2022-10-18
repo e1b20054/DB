@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import team9.db.db.model.Chamber;
 import team9.db.db.model.ChamberMapper;
 import team9.db.db.model.ChamberUser;
-//import team9.db.db.model.UserInfo;
+import team9.db.db.model.UserInfo;
 
 @Controller
 @RequestMapping("/sample4")
@@ -76,6 +76,24 @@ public class Sample41Controller {
   @GetMapping("step7")
   @Transactional
   public String sample47(ModelMap model) {
+    ArrayList<ChamberUser> chamberUsers7 = chamberMapper.selectAllChamberUser();
+    model.addAttribute("chamberUsers7", chamberUsers7);
+    return "sample46.html";
+  }
+
+  @PostMapping("step8")
+  @Transactional
+  public String sample48(@RequestParam Double height, @RequestParam Integer age, ModelMap model, Principal prin) {
+    String loginUser = prin.getName();
+    UserInfo ui = new UserInfo();
+    ui.setUserName(loginUser);
+    ui.setAge(age);
+    ui.setHeight(height);
+    try {
+      chamberMapper.insertUserInfo(ui);
+    } catch (RuntimeException e) {
+      System.out.println("Exception:" + e.getMessage());
+    }
     ArrayList<ChamberUser> chamberUsers7 = chamberMapper.selectAllChamberUser();
     model.addAttribute("chamberUsers7", chamberUsers7);
     return "sample46.html";
